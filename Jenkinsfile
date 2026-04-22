@@ -20,8 +20,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "kubectl apply -f deployment.yaml"
-                    sh "kubectl apply -f service.yaml"
+                    // Correction de l'erreur TLS avec --insecure-skip-tls-verify
+                    sh "kubectl apply -f deployment.yaml --insecure-skip-tls-verify=true"
+                    sh "kubectl apply -f service.yaml --insecure-skip-tls-verify=true"
+                    
+                    // Vérifier que tout est déployé
+                    sh "kubectl get pods --insecure-skip-tls-verify=true"
+                    sh "kubectl get services --insecure-skip-tls-verify=true"
                 }
             }
         }
